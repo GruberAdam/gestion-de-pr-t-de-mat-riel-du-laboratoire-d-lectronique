@@ -12,6 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'materialCategoryId')->textInput() ?>
+
     <?= $form->field($model, 'model')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'inventoryNumber')->textInput() ?>
@@ -20,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status')->textInput() ?>
 
-    <?= $form->field($model, 'materialCategoryId')->textInput() ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

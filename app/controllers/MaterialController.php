@@ -7,6 +7,7 @@ use app\models\MaterialSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii;
 
 /**
  * MaterialController implements the CRUD actions for Material model.

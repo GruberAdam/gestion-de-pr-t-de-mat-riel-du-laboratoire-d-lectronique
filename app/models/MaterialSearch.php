@@ -18,8 +18,8 @@ class MaterialSearch extends Material
     public function rules()
     {
         return [
-            [['id', 'inventoryNumber', 'status', 'materialCategoryId'], 'integer'],
-            [['model', 'serialNumber'], 'safe'],
+            [['id', 'inventoryNumber', 'status'], 'integer'],
+            [['model', 'serialNumber', 'materialCategoryId'], 'safe'],
         ];
     }
 
@@ -42,6 +42,7 @@ class MaterialSearch extends Material
     public function search($params)
     {
         $query = Material::find();
+        $query->joinWith(['materialCategory']);
 
         // add conditions that should always apply here
 
@@ -62,12 +63,12 @@ class MaterialSearch extends Material
             'id' => $this->id,
             'inventoryNumber' => $this->inventoryNumber,
             'status' => $this->status,
-            'materialCategoryId' => $this->materialCategoryId,
+            //'materialCategoryId' => $this->materialCategoryId,
         ]);
 
         $query->andFilterWhere(['like', 'model', $this->model])
             ->andFilterWhere(['like', 'serialNumber', $this->serialNumber])
-            ->andFilterWhere(['like', 'materialCategory.name', $this->materialCategory]);
+            ->andFilterWhere(['like', 'material_category.name', $this->materialCategoryId]);
 
         return $dataProvider;
     }

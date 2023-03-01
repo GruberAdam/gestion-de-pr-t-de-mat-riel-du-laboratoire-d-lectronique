@@ -34,8 +34,8 @@ class Material extends \yii\db\ActiveRecord
     {
         return [
             [['inventoryNumber', 'status', 'materialCategoryId'], 'required'],
-            [['inventoryNumber', 'status', 'materialCategoryId'], 'integer'],
-            [['model', 'serialNumber'], 'string', 'max' => 255],
+            [['inventoryNumber', 'status'], 'integer'],
+            [['model', 'serialNumber', 'materialCategoryId'], 'string', 'max' => 255],
             [['materialCategoryId'], 'exist', 'skipOnError' => true, 'targetClass' => MaterialCategory::class, 'targetAttribute' => ['materialCategoryId' => 'materialCategoryId']],
         ];
     }
@@ -51,7 +51,7 @@ class Material extends \yii\db\ActiveRecord
             'inventoryNumber' => 'Inventory Number',
             'serialNumber' => 'Serial Number',
             'status' => 'Status',
-            'materialCategoryId' => 'Material Category ID',
+            'materialCategoryId' => 'Material Name',
         ];
     }
 
