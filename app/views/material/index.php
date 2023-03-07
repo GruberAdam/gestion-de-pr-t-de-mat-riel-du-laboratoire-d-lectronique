@@ -12,6 +12,7 @@ use yii\grid\GridView;
 
 $this->title = 'Materials';
 $this->params['breadcrumbs'][] = $this->title;
+Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
 ?>
 <div class="material-index">
 
@@ -24,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
+
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -35,8 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'model',
             'inventoryNumber',
             'serialNumber',
-            'status',
-
+            'status:boolean',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Material $model, $key, $index, $column) {

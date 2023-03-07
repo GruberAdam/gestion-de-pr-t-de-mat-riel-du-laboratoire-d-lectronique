@@ -10,6 +10,8 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Materials', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
 ?>
 <div class="material-view">
 
@@ -34,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'model',
             'inventoryNumber',
             'serialNumber',
-            'status',
+            'status:boolean',
         ],
     ]) ?>
 

@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\models\MaterialCategory;
+
 
 /** @var yii\web\View $this */
 /** @var app\models\Material $model */
@@ -12,7 +15,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'materialCategoryId')->textInput() ?>
+    <?= $form->field($model, 'materialCategoryId')->dropDownList(ArrayHelper::map(MaterialCategory::find()->all(), 'materialCategoryId', 'name')) ?>
 
     <?= $form->field($model, 'model')->textInput(['maxlength' => true]) ?>
 
@@ -20,7 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'serialNumber')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->textInput()->dropDownList(array(0 => 'Unavailable', 1 => 'Available')) ?>
 
 
 
