@@ -44,7 +44,6 @@ class AccountType extends \yii\db\ActiveRecord
             'name' => 'Name',
         ];
     }
-
     /**
      * Gets query for [[Accounts]].
      *

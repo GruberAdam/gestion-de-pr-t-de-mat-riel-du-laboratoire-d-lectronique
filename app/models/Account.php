@@ -11,11 +11,12 @@ use Yii;
  * @property string $email
  * @property int $accountTypeId
  * @property string $password
+ * @property string $authKey
  *
  * @property AccountType $accountType
  * @property MaterialLoan[] $materialLoans
  */
-class Account extends \yii\db\ActiveRecord
+class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -31,10 +32,10 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['email', 'accountTypeId', 'password'], 'required'],
+            [['email', 'accountTypeId', 'password', 'authKey'], 'required'],
             [['accountTypeId'], 'integer'],
-            [['email', 'password'], 'string', 'max' => 255],
-            [['email'], 'unique'],
+            [['email', 'password', 'authKey'], 'string', 'max' => 255],
+            [['email', 'authKey'], 'unique'],
             [['accountTypeId'], 'exist', 'skipOnError' => true, 'targetClass' => AccountType::class, 'targetAttribute' => ['accountTypeId' => 'accountTypeId']],
         ];
     }
@@ -49,7 +50,42 @@ class Account extends \yii\db\ActiveRecord
             'email' => 'Email',
             'accountTypeId' => 'Account Type ID',
             'password' => 'Password',
+            'authKey' => 'Authentification Key'
         ];
+    }
+
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function getId(){
+        return $this->id;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new \yii\base\NotSupportedException();
+    }
+
+    public static function findByEmail($email)
+    {
+        return self::findOne(['email' => $email]);
+    }
+
+    public function validatePassword($password)
+    {
+        return $this->password === $password;
     }
 
     /**
