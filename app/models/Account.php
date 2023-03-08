@@ -26,6 +26,12 @@ class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'account';
     }
 
+    public function init()
+    {
+        $this->accountTypeId = 1;
+        parent::init();
+    }
+
     /**
      * {@inheritdoc}
      */
