@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\base\ErrorException;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "account".
@@ -92,6 +94,21 @@ class Account extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+
+    public function isAdmin($id)
+    {
+        $adminTypeValue = AccountType::findBySql('SELECT accountTypeId FROM pretpi.account_type WHERE name = "admin"')->all()[0]['accountTypeId'];
+        $accountTypeValue = Account::findBySql("SELECT accountTypeId FROM pretpi.account WHERE id = '$id'")->all()[0]['accountTypeId'];
+
+        if ($accountTypeValue == $adminTypeValue)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**

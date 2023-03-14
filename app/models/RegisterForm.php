@@ -32,12 +32,13 @@ class RegisterForm extends Model
     public function register()
     {
         if ($this->validate()){
+
             $newAccount = new Account();
             $newAccount->email = $this->email;
             $newAccount->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
             $newAccount->authKey = Yii::$app->security->generateRandomString();
-
             if ($newAccount->validate()){
+                Yii::warning($newAccount->errors);
                 $newAccount->insert();
                 return true;
             }
@@ -45,5 +46,6 @@ class RegisterForm extends Model
             Yii::warning($newAccount->errors);
             return false;
         }
+        Yii::warning("yo");
     }
 }

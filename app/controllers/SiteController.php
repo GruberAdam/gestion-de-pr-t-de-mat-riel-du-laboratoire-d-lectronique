@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -76,11 +77,24 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
 
+        $model = new LoginForm();
+
+        try {
+
+
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                $session = Yii::$app->session;
+                $session->set('isAdmin', Yii::$app->user->identity->isAdmin(Yii::$app->user->id));
+
+                return $this->goBack();
+            }
+        } catch (Exception $e){
+            $name = "Database";
+            $message = $e->getMessage();
+            Yii::warning($message);
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $model->password = '';
         return $this->render('login', [
             'model' => $model,
@@ -107,8 +121,16 @@ class SiteController extends Controller
 
         $model = new RegisterForm();
 
-        if ($model->load(Yii::$app->request->post()) &&$model->register()) {
-            return $this->goBack();
+        try {
+            if ($model->load(Yii::$app->request->post()) &&$model->register()) {
+                return $this->goBack();
+            }
+        }
+        catch (Exception $e){
+            $name = "Database";
+            $message = $e->getMessage();
+            Yii::warning($message);
+            return $this->render('error', ['name' => $name, 'message' => $message]);
         }
 
         return $this->render('register', [

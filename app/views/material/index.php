@@ -19,12 +19,19 @@ Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Material', ['create'], ['class' => 'btn btn-success']) ?>
+        <?=
+        Yii::$app->session->get('isAdmin') ? (
+        Html::a('Create Material', ['create'], ['class' => 'btn btn-success'])
+        ) : (
+                ""
+        )
+        ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
 
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -38,14 +45,23 @@ Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
             'inventoryNumber',
             'serialNumber',
             'status:boolean',
+            Yii::$app->session->get('isAdmin') ? (
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Material $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+                },
+            ]
+            ) : (
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Material $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                },
+                'template' => '{view}',
+            ]
+            ),
         ],
     ]); ?>
-
 
 </div>

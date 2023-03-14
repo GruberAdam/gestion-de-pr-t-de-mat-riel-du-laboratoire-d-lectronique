@@ -38,14 +38,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Material', 'url' => ['/material/index']],
-        ];
-
+    ];
     if (Yii::$app->user->isGuest){
         $menuItems[] = ['label' => 'Register', 'url' => ['/site/register']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else{
+        $menuItems[] = ['label' => 'Material', 'url' => ['/material/index']];
         $menuItems[] = [
                 'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],

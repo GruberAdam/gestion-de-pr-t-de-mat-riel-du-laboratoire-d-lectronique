@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Materials', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
+Yii::warning(Yii::$app->session->get('isAdmin'));
 Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
 ?>
 <div class="material-view">
@@ -18,14 +19,18 @@ Yii::$app->formatter->booleanFormat = ['Unavailable', 'Available'];
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?php if (Yii::$app->session->get('isAdmin')){
+            Yii::warning("in");
+        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+        echo Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]);
+        } ?>
+
     </p>
 
     <?= DetailView::widget([

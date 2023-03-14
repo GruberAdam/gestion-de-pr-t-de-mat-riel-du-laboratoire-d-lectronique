@@ -32,6 +32,7 @@ class MaterialController extends Controller
         );
     }
 
+
     /**
      * Lists all Material models.
      *
@@ -39,6 +40,11 @@ class MaterialController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
         $searchModel = new MaterialSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -68,6 +74,13 @@ class MaterialController extends Controller
      */
     public function actionCreate()
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = new Material();
 
         if ($this->request->isPost) {
@@ -92,6 +105,13 @@ class MaterialController extends Controller
      */
     public function actionUpdate($id)
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -112,6 +132,13 @@ class MaterialController extends Controller
      */
     public function actionDelete($id)
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

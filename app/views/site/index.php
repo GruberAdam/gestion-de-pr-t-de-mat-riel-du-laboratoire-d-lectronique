@@ -3,6 +3,8 @@
 /** @var yii\web\View $this */
 
 $this->title = 'My Yii Application';
+
+//Yii::warning(Yii::$app->user->identity->isAdmin(9));
 ?>
 <div class="site-index">
 
