@@ -33,8 +33,8 @@ class MaterialLoan extends \yii\db\ActiveRecord
     {
         return [
             [['materialId', 'accountId', 'loanDate', 'returnDate'], 'required'],
-            [['materialId', 'accountId'], 'integer'],
             [['loanDate', 'returnDate'], 'safe'],
+            [['accountId', 'materialId'],  'string', 'max' => 255],
             [['materialId'], 'exist', 'skipOnError' => true, 'targetClass' => Material::class, 'targetAttribute' => ['materialId' => 'id']],
             [['accountId'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['accountId' => 'id']],
         ];
@@ -47,8 +47,8 @@ class MaterialLoan extends \yii\db\ActiveRecord
     {
         return [
             'materialLoanId' => 'Material Loan ID',
-            'materialId' => 'Material ID',
-            'accountId' => 'Account ID',
+            'materialId' => 'Material Name',
+            'accountId' => 'Account',
             'loanDate' => 'Loan Date',
             'returnDate' => 'Return Date',
         ];
@@ -72,5 +72,11 @@ class MaterialLoan extends \yii\db\ActiveRecord
     public function getMaterial()
     {
         return $this->hasOne(Material::class, ['id' => 'materialId']);
+    }
+
+    public function getMaterialCategory()
+    {
+        return $this->hasOne(MaterialCategory::class, ['materialCategoryId' => 'materialCategoryId'])
+            ->via("material");
     }
 }
