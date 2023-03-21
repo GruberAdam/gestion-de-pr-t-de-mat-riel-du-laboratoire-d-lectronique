@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Material;
 use app\models\MaterialLoan;
 use app\models\MaterialLoanSearch;
 use yii\web\Controller;
@@ -68,9 +69,16 @@ class MaterialLoanController extends Controller
     public function actionCreate()
     {
         $model = new MaterialLoan();
-
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $material = Material::find()->where(['id' => $model->materialId])->all()[0];
+                $material['status'] = 0;
+
+                if (!$material->validate()){
+                    \Yii::warning($material->getErrors());
+                }
+                $material->update();
+
                 return $this->redirect(['view', 'materialLoanId' => $model->materialLoanId]);
             }
         } else {
@@ -89,6 +97,8 @@ class MaterialLoanController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+
     public function actionUpdate($materialLoanId)
     {
         $model = $this->findModel($materialLoanId);
@@ -97,7 +107,6 @@ class MaterialLoanController extends Controller
 
             return $this->redirect(['view', 'materialLoanId' => $model->materialLoanId]);
         }
-        \Yii::warning($model->getErrors());
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -113,6 +122,19 @@ class MaterialLoanController extends Controller
     public function actionDelete($materialLoanId)
     {
         $this->findModel($materialLoanId)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionMaterialReturned($materialId){
+
+        $material = Material::findOne(['id' => $materialId]);
+        $material->status = 1;
+
+        if (!$material->validate()){
+            \Yii::warning($material->getErrors());
+        }
+        $material->update();
 
         return $this->redirect(['index']);
     }

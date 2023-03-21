@@ -40,12 +40,23 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest){
+        //For guests users
         $menuItems[] = ['label' => 'Register', 'url' => ['/site/register']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else{
+    } else if (Yii::$app->session->get('isAdmin')){
+        // For admin users
+        $menuItems[] = ['label' => 'Loans', 'url' => ['/material-loan/index']];
         $menuItems[] = ['label' => 'Material', 'url' => ['/material/index']];
         $menuItems[] = [
-                'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
+            'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
+            'url' => ['/site/logout'],
+            'linkOptions' => ['data-method' => 'post']
+        ];
+    } else {
+        // For login users
+        $menuItems[] = ['label' => 'Material', 'url' => ['/material/index']];
+        $menuItems[] = [
+            'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];

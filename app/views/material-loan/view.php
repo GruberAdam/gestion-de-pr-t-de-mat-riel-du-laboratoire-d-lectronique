@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Material;
 
 /** @var yii\web\View $this */
 /** @var app\models\MaterialLoan $model */
@@ -16,14 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'materialLoanId' => $model->materialLoanId], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Update', ['update', 'materialLoanId' => $model->materialLoanId], ['class' => 'btn btn-primary'])  ?>
         <?= Html::a('Delete', ['delete', 'materialLoanId' => $model->materialLoanId], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ])  ?>
     </p>
 
     <?= DetailView::widget([
@@ -31,16 +32,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'materialLoanId',
             [
+                    'label' => 'Material ID',
+                'attribute' => 'materialId'
+            ],
+            [
                 'attribute' => 'materialId',
                 'value' => function ($data)
                 {
                     return $data->materialCategory->name;
                 }
             ],
+            'material.inventoryNumber',
             'account.email',
             'loanDate',
             'returnDate',
         ],
     ]) ?>
+
+    <?php
+    if (Material::findOne(['id' => $model->materialId])['status'] == 0){
+        echo Html::a('Confirm return of the material', ['material-returned', 'materialId' => $model->materialId], ['class' => 'btn btn-success']);
+    }
+    ?>
+
 
 </div>

@@ -34,9 +34,9 @@ class Material extends \yii\db\ActiveRecord
     {
         return [
             [['inventoryNumber', 'status', 'materialCategoryId'], 'required'],
-            [['inventoryNumber', 'status'], 'integer'],
+            [['inventoryNumber', 'status', 'materialCategoryId'], 'integer'],
             [['inventoryNumber'], 'unique'],
-            [['model', 'serialNumber', 'materialCategoryId'], 'string', 'max' => 255],
+            [['model', 'serialNumber', ], 'string', 'max' => 255],
             [['materialCategoryId'], 'exist', 'skipOnError' => true, 'targetClass' => MaterialCategory::class, 'targetAttribute' => ['materialCategoryId' => 'materialCategoryId']],
         ];
     }
@@ -54,6 +54,12 @@ class Material extends \yii\db\ActiveRecord
             'status' => 'Status',
             'materialCategoryId' => 'Material Name',
         ];
+    }
+
+    public function getMaterialNameFromId($id)
+    {
+        $output = $this->findBySql("SELECT name FROM material_category WHERE materialCategoryId = $id");
+        Yii::warning($output);
     }
 
     /**
