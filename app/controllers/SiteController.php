@@ -81,8 +81,6 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         try {
-
-
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 $session = Yii::$app->session;
                 $session->set('isAdmin', Yii::$app->user->identity->isAdmin(Yii::$app->user->id));

@@ -8,6 +8,7 @@ use app\models\MaterialLoanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * MaterialLoanController implements the CRUD actions for MaterialLoan model.
@@ -39,6 +40,12 @@ class MaterialLoanController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest){
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $searchModel = new MaterialLoanSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -68,6 +75,13 @@ class MaterialLoanController extends Controller
      */
     public function actionCreate()
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = new MaterialLoan();
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -101,6 +115,13 @@ class MaterialLoanController extends Controller
 
     public function actionUpdate($materialLoanId)
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $model = $this->findModel($materialLoanId);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -121,21 +142,39 @@ class MaterialLoanController extends Controller
      */
     public function actionDelete($materialLoanId)
     {
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
+
         $this->findModel($materialLoanId)->delete();
 
         return $this->redirect(['index']);
     }
 
     public function actionMaterialReturned($materialId){
+        /* Checks that user is admin */
+        if (!Yii::$app->session->get('isAdmin')) {
+            $name = "Permissions";
+            $message = "You are not allowed to go on this page";
+            return $this->render('error', ['name' => $name, 'message' => $message]);
+        }
 
         $material = Material::findOne(['id' => $materialId]);
         $material->status = 1;
 
-        if (!$material->validate()){
-            \Yii::warning($material->getErrors());
+        $loan = MaterialLoan::findOne(['materialId' => $materialId]);
+        $loan->active = 0;
+        Yii::warning($loan->active);
+
+        if (!$material->validate() || !$loan->validate()){
+            Yii::warning($material->getErrors());
+            Yii::warning($loan->getErrors());
         }
         $material->update();
-
+        $loan->update();
         return $this->redirect(['index']);
     }
 

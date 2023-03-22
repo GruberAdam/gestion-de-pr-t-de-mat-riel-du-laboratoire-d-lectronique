@@ -43,6 +43,7 @@ class MaterialLoanSearch extends MaterialLoan
         $query = MaterialLoan::find();
         $query->joinWith(['account']);
         $query->joinWith(['materialCategory']);
+        $query->joinWith(['material']);
 
         // add conditions that should always apply here
 
@@ -61,7 +62,7 @@ class MaterialLoanSearch extends MaterialLoan
         // grid filtering conditions
         $query->andFilterWhere([
             'materialLoanId' => $this->materialLoanId,
-            //'returnDate' => $this->returnDate,
+            'material.inventoryNumber' => $this->materialId
         ]);
         $query->andFilterWhere(['like', 'account.email', $this->accountId])
             ->andFilterWhere(['like', 'material_category.name', $this->materialId])

@@ -12,6 +12,7 @@ use Yii;
  * @property int $accountId
  * @property string $loanDate
  * @property string $returnDate
+ * @property int $active
  *
  * @property Account $account
  * @property Material $material
@@ -26,15 +27,21 @@ class MaterialLoan extends \yii\db\ActiveRecord
         return 'material_loan';
     }
 
+    public function init()
+    {
+        $this->active = 1;
+        parent::init();
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['materialId', 'accountId', 'loanDate', 'returnDate'], 'required'],
+            [['materialId', 'accountId', 'loanDate', 'returnDate', 'active'], 'required'],
             [['loanDate', 'returnDate'], 'safe'],
-            [['accountId', 'materialId'],  'string', 'max' => 255],
+            [['active', 'accountId', 'materialId'], 'integer'],
             [['materialId'], 'exist', 'skipOnError' => true, 'targetClass' => Material::class, 'targetAttribute' => ['materialId' => 'id']],
             [['accountId'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['accountId' => 'id']],
         ];

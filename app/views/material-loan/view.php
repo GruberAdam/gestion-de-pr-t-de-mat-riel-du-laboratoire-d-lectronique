@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <?php
-    if (Material::findOne(['id' => $model->materialId])['status'] == 0){
+    if (\app\models\MaterialLoan::findOne(['materialLoanId' => $model->materialLoanId])['active'] == 1){
         echo Html::a('Confirm return of the material', ['material-returned', 'materialId' => $model->materialId], ['class' => 'btn btn-success']);
     }
     ?>

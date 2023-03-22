@@ -1,8 +1,8 @@
 <?php
 
 use app\models\MaterialLoan;
-use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
@@ -13,6 +13,8 @@ use yii\grid\GridView;
 $this->title = 'Material Loans';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+
 <div class="material-loan-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -26,9 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function($model) {
+        if ($model->active == 1 ){
+            return ['style' => 'background-color:yellow'];
+        }
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            //'materialLoanId',
+            'material.inventoryNumber',
             [
                 'attribute' => 'materialId',
                 'value' => function ($data)
@@ -50,6 +57,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
 
 </div>

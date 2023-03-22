@@ -23,7 +23,7 @@ use app\models\MaterialCategory;
 
     <?= $form->field($model, 'serialNumber')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->textInput()->dropDownList(array(0 => 'Unavailable', 1 => 'Available')) ?>
+    <?= $form->field($model, 'status')->textInput()->dropDownList(array(1 => 'Available', 0 => 'Unavailable')) ?>
 
 
 
