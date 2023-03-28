@@ -47,6 +47,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         // For admin users
         $menuItems[] = ['label' => 'Loans', 'url' => ['/material-loan/index']];
         $menuItems[] = ['label' => 'Material', 'url' => ['/material/index']];
+        $menuItems[] = ['label' => 'Material categories', 'url' => ['/material-category/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
             'url' => ['/site/logout'],

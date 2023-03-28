@@ -40,7 +40,7 @@ class MaterialCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'materialCategoryId' => 'Material Category I',
+            'materialCategoryId' => 'Material Category',
             'name' => 'Name',
         ];
     }

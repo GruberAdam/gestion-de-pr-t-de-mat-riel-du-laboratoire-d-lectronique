@@ -3,14 +3,13 @@
 namespace app\models;
 
 use yii\base\Model;
-use yii;
 use yii\data\ActiveDataProvider;
-use app\models\Material;
+use app\models\MaterialCategory;
 
 /**
- * MaterialSearch represents the model behind the search form of `app\models\Material`.
+ * MaterialCategorySearch represents the model behind the search form of `app\models\MaterialCategory`.
  */
-class MaterialSearch extends Material
+class MaterialCategorySearch extends MaterialCategory
 {
     /**
      * {@inheritdoc}
@@ -18,8 +17,8 @@ class MaterialSearch extends Material
     public function rules()
     {
         return [
-            [['id', 'inventoryNumber', 'status'], 'integer'],
-            [['model', 'serialNumber', 'materialCategoryId'], 'safe'],
+            [['materialCategoryId'], 'integer'],
+            [['name'], 'safe'],
         ];
     }
 
@@ -41,8 +40,7 @@ class MaterialSearch extends Material
      */
     public function search($params)
     {
-        $query = Material::find();
-        $query->joinWith(['materialCategory']);
+        $query = MaterialCategory::find();
 
         // add conditions that should always apply here
 
@@ -60,15 +58,10 @@ class MaterialSearch extends Material
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
-            //'materialCategoryId' => $this->materialCategoryId,
+            'materialCategoryId' => $this->materialCategoryId,
         ]);
 
-        $query->andFilterWhere(['like', 'model', $this->model])
-            ->andFilterWhere(['like', 'serialNumber', $this->serialNumber])
-            ->andFilterWhere(['like', 'material_category.name', $this->materialCategoryId])
-            ->andFilterWhere(['like', 'inventoryNumber', $this->inventoryNumber]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }
